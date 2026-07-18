@@ -12,42 +12,43 @@ OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 INDEX_NAME = "enterprise-knowledge"
 
+
 # Temporary Admin button to load data into your empty Pinecone Index
-if st.sidebar.button("⚙️ Admin: Run Data Ingestion Pipeline"):
-    with st.spinner("Processing document, chunking text, and generating vector embeddings..."):
-        try:
+# if st.sidebar.button("⚙️ Admin: Run Data Ingestion Pipeline"):
+ #   with st.spinner("Processing document, chunking text, and generating vector embeddings..."):
+  #      try:
             # Re-using the ingestion logic from our architectural blueprint
-            from langchain_community.document_loaders import PyPDFLoader
-            from langchain_text_splitters import RecursiveCharacterTextSplitter
+   #         from langchain_community.document_loaders import PyPDFLoader
+    #        from langchain_text_splitters import RecursiveCharacterTextSplitter
             
             # 1. Load the file from your GitHub data folder
-            loader = PyPDFLoader("data/company_policy.pdf")
-            raw_docs = loader.load()
+     #       loader = PyPDFLoader("data/company_policy.pdf")
+      #      raw_docs = loader.load()
             
             # 2. Slice text into blocks
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-            documents = text_splitter.split_documents(raw_docs)
+       #     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        #    documents = text_splitter.split_documents(raw_docs)
             
             # 3. Connect to Pinecone Index
-            pc = Pinecone(api_key=PINECONE_API_KEY)
-            index = pc.Index(INDEX_NAME)
-            embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=OPENAI_API_KEY)
+         #   pc = Pinecone(api_key=PINECONE_API_KEY)
+          #  index = pc.Index(INDEX_NAME)
+           # embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=OPENAI_API_KEY)
             
             # 4. Format and Upload Vectors
-            vectors_to_upsert = []
-            for i, doc in enumerate(documents):
-                vector = embeddings.embed_query(doc.page_content)
-                vectors_to_upsert.append({
-                    "id": f"chunk_{i}",
-                    "values": vector,
-                    "metadata": {"text": doc.page_content}
-                })
+           # vectors_to_upsert = []
+           # for i, doc in enumerate(documents):
+            #    vector = embeddings.embed_query(doc.page_content)
+             #   vectors_to_upsert.append({
+              #      "id": f"chunk_{i}",
+               #     "values": vector,
+                #    "metadata": {"text": doc.page_content}
+               # })
             
-            index.upsert(vectors=vectors_to_upsert)
-            st.sidebar.success("🎉 Ingestion Complete! Data is now live in Pinecone.")
+           # index.upsert(vectors=vectors_to_upsert)
+           # st.sidebar.success("🎉 Ingestion Complete! Data is now live in Pinecone.")
             
-        except Exception as e:
-            st.sidebar.error(f"Ingestion failed: {str(e)}")
+        # except Exception as e:
+          #  st.sidebar.error(f"Ingestion failed: {str(e)}")
 
 
 user_query = st.text_input("Ask our AI Agent anything about corporate data policies:", placeholder="e.g., What is our policy on international expense payouts?")

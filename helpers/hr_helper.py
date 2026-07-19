@@ -1,3 +1,7 @@
+from pinecone import Pinecone
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+import streamlit as st
+
 def render_hr_compliance_demo(openai_key, pinecone_key, index_name):
     st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
     

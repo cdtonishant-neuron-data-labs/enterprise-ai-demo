@@ -18,7 +18,10 @@ INDEX_NAME = "enterprise-knowledge"
 
 # Temporary Admin button to load data into your empty Pinecone Index 
 if st.sidebar.button("⚙️ Admin: Run Data Ingestion Pipeline"): 
-    run_data_ingestion() 
+    run_data_ingestion(openai_key=OPENAI_API_KEY, 
+        pinecone_key=PINECONE_API_KEY, 
+        index_name=INDEX_NAME
+    )
 
 # Navigation Sidebar 
 st.sidebar.title("💼 Enterprise AI Portfolio") 

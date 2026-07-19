@@ -8,7 +8,7 @@ from admin.ingest import run_data_ingestion
 # from helpers.finance_helper import render_financial_auditor_demo
 
 st.set_page_config(page_title="AI Data Insights Demo", layout="wide")
-st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
+#st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
 
 # Retrieve hidden secure keys from Streamlit Cloud Secrets management
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
@@ -36,7 +36,6 @@ demo_selection = st.sidebar.radio(
 )
 
 if demo_selection == "1. HR & Compliance Assistant (Current)":
-    st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
     render_hr_compliance_demo(
         openai_key=OPENAI_API_KEY, 
         pinecone_key=PINECONE_API_KEY, 

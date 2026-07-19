@@ -49,7 +49,7 @@ def render_hr_compliance_demo(openai_key, pinecone_key, index_name):
             for match in search_results['matches']:
                 retrieved_context += match['metadata']['text'] + "\n\n"
                 
-            system_prompt = f"You are a corporate legal compliance assistant. Answer the user strictly using the provided context.\n\nCONTEXT:\n{retrieved_context}"
+            system_prompt = f"You are a corporate legal compliance assistant. Answer the user strictly using the provided context.Respond in clean, standard Markdown prose. Do not use mathematical styling, italics, or bolding on individual characters or whole sentences unless emphasizing a key term.\n\nCONTEXT:\n{retrieved_context}"
             
             llm = ChatOpenAI(model="gpt-4o", temperature=0.0, api_key=openai_key)
             response = llm.invoke([

@@ -3,9 +3,9 @@ from pinecone import Pinecone
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from app import PINECONE_API_KEY, INDEX_NAME, OPENAI_API_KEY
 
-def run_data_ingestion():
+
+def run_data_ingestion(openai_key, pinecone_key, index_name):
     with st.spinner("Processing document, chunking text, and generating vector embeddings..."):
         try:
             # 1. Load the file from your GitHub data folder
@@ -17,9 +17,9 @@ def run_data_ingestion():
             documents = text_splitter.split_documents(raw_docs)
             
             # 3. Connect to Pinecone Index
-            pc = Pinecone(api_key=PINECONE_API_KEY)
-            index = pc.Index(INDEX_NAME)
-            embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=OPENAI_API_KEY)
+            pc = Pinecone(api_key=pinecone_key)
+            index = pc.Index(index_name)
+            embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=openai_key)
             
             # 4. Format and Upload Vectors
             vectors_to_upsert = []

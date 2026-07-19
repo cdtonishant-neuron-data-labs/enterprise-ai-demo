@@ -16,22 +16,20 @@ PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 INDEX_NAME = "enterprise-knowledge"
 
 
-# Temporary Admin button to load data into your empty Pinecone Index
- if st.sidebar.button("⚙️ Admin: Run Data Ingestion Pipeline"):
-    run_data_ingestion()
+# Temporary Admin button to load data into your empty Pinecone Index 
+if st.sidebar.button("⚙️ Admin: Run Data Ingestion Pipeline"): 
+    run_data_ingestion() 
 
-st.set_page_config(page_title="Enterprise AI Solutions", layout="wide")
-
-# Navigation Sidebar
-st.sidebar.title("💼 Enterprise AI Portfolio")
+# Navigation Sidebar 
+st.sidebar.title("💼 Enterprise AI Portfolio") 
 demo_selection = st.sidebar.radio(
-    "Select a Live Business Use Case:",
+    "Select a Live Business Use Case:", 
     [
-        "1. HR & Compliance Assistant (Current)",
-        "2. Automated Financial Auditor",
-        "3. E-commerce Customer Sentiment Pipeline",
+        "1. HR & Compliance Assistant (Current)", 
+        "2. Automated Financial Auditor", 
+        "3. E-commerce Customer Sentiment Pipeline", 
         "4. B2B Sales Intel & Lead Enrichment"
-    ]
+    ] 
 )
 
 if demo_selection == "1. HR & Compliance Assistant (Current)":

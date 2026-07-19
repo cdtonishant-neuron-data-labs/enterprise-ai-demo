@@ -1,19 +1,39 @@
-import streamlit as st
-from pinecone import Pinecone
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-
-# accept keys as parameters:
 def render_hr_compliance_demo(openai_key, pinecone_key, index_name):
     st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
     
-    user_query = st.text_input(
-        "Ask our AI Agent anything about corporate data policies:", 
-        placeholder="e.g., What is our policy on international expense payouts?"
-    )
-    
-    if user_query:
+    # 1. Initialize chat history in session state if it doesn't exist yet
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+
+    # 2. Create a 2-column layout to show chat input and chat history side-by-side
+    col1, col2 = st.columns([1, 1]) # Adjust ratios (e.g., [2, 3]) if you want one side wider
+
+    with col1:
+        st.subheader("💬 Ask a New Question")
+        user_query = st.text_area(
+            "Enter your policy query:", 
+            placeholder="e.g., What is our policy on international expense payouts?",
+            height=150,
+            key="hr_user_query_input" # Unique key for session management
+        )
+        submit_button = st.button("Ask AI Agent")
+
+    with col2:
+        st.subheader("📜 Conversation History")
+        # Container with fixed scroll height to cleanly display logs
+        with st.container(height=400):
+            if not st.session_state.chat_history:
+                st.caption("No conversation history yet. Ask a question on the left!")
+            else:
+                # Render the history in reverse order (newest at the top) or standard order
+                for chat in reversed(st.session_state.chat_history):
+                    st.markdown(f"**👤 You:** {chat['question']}")
+                    st.info(f"**🤖 AI:** {chat['answer']}")
+                    st.markdown("---")
+
+    # 3. Process the logic only when the user explicitly clicks the button
+    if submit_button and user_query:
         with st.spinner("Querying vector database and synthesizing answer..."):
-            # Use the variables passed into the function parameters
             pc = Pinecone(api_key=pinecone_key)
             index = pc.Index(index_name)
             embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=openai_key)
@@ -33,5 +53,9 @@ def render_hr_compliance_demo(openai_key, pinecone_key, index_name):
                 {"role": "user", "content": user_query}
             ])
             
-            st.write("### 📋 AI Assistant Response:")
-            st.info(response.content)
+            # 4. Save the Q&A pair to history and force a quick rerun to update the UI
+            st.session_state.chat_history.append({
+                "question": user_query,
+                "answer": response.content
+            })
+            st.rerun()

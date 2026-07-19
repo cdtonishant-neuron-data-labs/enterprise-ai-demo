@@ -50,6 +50,35 @@ INDEX_NAME = "enterprise-knowledge"
         # except Exception as e:
           #  st.sidebar.error(f"Ingestion failed: {str(e)}")
 
+import streamlit as st
+
+st.set_page_config(page_title="Enterprise AI Solutions", layout="wide")
+
+# Navigation Sidebar
+st.sidebar.title("💼 Enterprise AI Portfolio")
+demo_selection = st.sidebar.radio(
+    "Select a Live Business Use Case:",
+    [
+        "1. HR & Compliance Assistant (Current)",
+        "2. Automated Financial Auditor",
+        "3. E-commerce Customer Sentiment Pipeline",
+        "4. B2B Sales Intel & Lead Enrichment"
+    ]
+)
+
+if demo_selection == "1. HR & Compliance Assistant (Current)":
+    st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
+    render_hr_compliance_demo()
+
+elif demo_selection == "2. Automated Financial Auditor":
+    render_financial_auditor_demo()
+
+elif demo_selection == "3. E-commerce Customer Sentiment Pipeline":
+    render_sentiment_pipeline_demo()
+
+elif demo_selection == "4. B2B Sales Intel & Lead Enrichment":
+    render_sales_intel_demo()
+
 
 user_query = st.text_input("Ask our AI Agent anything about corporate data policies:", placeholder="e.g., What is our policy on international expense payouts?")
 

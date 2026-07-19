@@ -1,7 +1,13 @@
 from pinecone import Pinecone
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 import streamlit as st
+import re
 
+def clean_ai_response(text):
+    # This regex looks for single letters wrapped in asterisks with spaces
+    cleaned = re.sub(r'\*([a-zA-Z])\*\s?', r'\1', text)
+    return cleaned
+    
 def render_hr_compliance_demo(openai_key, pinecone_key, index_name):
     st.title("🤖 Secure AI & Live Enterprise Data Pipeline")
     
@@ -56,10 +62,12 @@ def render_hr_compliance_demo(openai_key, pinecone_key, index_name):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_query}
             ])
+
+            cleaned_text = clean_ai_response(response.content)
             
             # 4. Save the Q&A pair to history and force a quick rerun to update the UI
             st.session_state.chat_history.append({
                 "question": user_query,
-                "answer": response.content
+                "answer": cleaned_text
             })
             st.rerun()
